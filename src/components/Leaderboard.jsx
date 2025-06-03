@@ -3,18 +3,26 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
+import { CATEGORY_LABELS } from "../utils/categories";
 
 const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState([]);
+  const [categoryFilter, setCategoryFilter] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("games")
         .select("*")
         .order("score", { ascending: false })
         .limit(20);
+
+      if (categoryFilter) {
+        query = query.eq("category", categoryFilter);
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         console.error(
@@ -27,7 +35,7 @@ const Leaderboard = () => {
     };
 
     fetchLeaderboard();
-  }, []);
+  }, [categoryFilter]);
 
   const medalEmoji = ["🥇", "🥈", "🥉"];
 
@@ -40,10 +48,32 @@ const Leaderboard = () => {
         </Button>
       </div>
 
+      <div className="w-full max-w-3xl mb-6">
+        <label
+          htmlFor="category"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
+          Filtrer par catégorie
+        </label>
+        <select
+          id="category"
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          className="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:ring-indigo-300"
+        >
+          <option value="">Toutes les catégories</option>
+          {Object.entries(CATEGORY_LABELS).map(([id, label]) => (
+            <option key={id} value={id}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="w-full max-w-3xl bg-white p-6 rounded-xl shadow-xl border border-indigo-200">
         {leaderboard.length === 0 ? (
           <p className="text-center text-gray-500">
-            Aucun score enregistré pour l’instant.
+            Aucun score enregistré pour cette catégorie.
           </p>
         ) : (
           leaderboard.map((entry, index) => {
@@ -66,7 +96,7 @@ const Leaderboard = () => {
                       {entry.user_name}
                     </p>
                     <p className="text-gray-500 text-xs">
-                      Catégorie : {entry.category || "Mix"}
+                      Catégorie : {CATEGORY_LABELS[entry.category] || "Mix"}
                     </p>
                   </div>
                 </div>
