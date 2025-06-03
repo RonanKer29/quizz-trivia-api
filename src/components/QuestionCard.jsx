@@ -9,6 +9,7 @@ const QuestionCard = ({
   onAnswer,
   onNext,
   totalQuestions,
+  selectedCategoryLabel,
 }) => {
   const [shuffledAnswers, setShuffledAnswers] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -48,16 +49,18 @@ const QuestionCard = ({
   return (
     <div className="h-screen w-screen flex items-center justify-center px-4">
       <div className="text-center max-w-xl space-y-6">
+        <h1 className="text-lg text-muted-foreground font-bold">
+          Tu joues dans la catégorie: {selectedCategoryLabel}
+        </h1>
         <p className="text-gray-600 text-sm">
-          {" "}
           Question : {currentIndex + 1} / {totalQuestions}
         </p>
-        <p className="text-xl font-semibold">
+        <p className="text-3xl font-semibold">
           {decodeHTML(questionData.question)}
         </p>
 
         <div className="grid gap-4">
-          <p className="text-sm text-gray-500">⏱ Temps restant : {timer}s</p>
+          <p className="text-sm text-red-500">⏱ Temps restant : {timer}s</p>
 
           {shuffledAnswers.map((sa, i) => (
             <Button
