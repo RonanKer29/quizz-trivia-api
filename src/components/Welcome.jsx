@@ -21,7 +21,7 @@ const Welcome = ({ onStart }) => {
         </p>
         <p className="text-gray-700">
           Une bonne réponse s'affichera en vert. Une mauvaise en rouge avec la
-          bonne réponse indiquée.
+          bonne réponse indiquée
         </p>
 
         <div className="space-y-4">
