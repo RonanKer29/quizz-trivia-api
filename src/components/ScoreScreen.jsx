@@ -1,6 +1,8 @@
 import { Button } from "./ui/button";
 import { useEffect, useRef } from "react";
 import { supabase } from "../supabaseClient";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const getFeedbackMessage = (score, total) => {
   const ratio = score / total;
@@ -22,6 +24,7 @@ const ScoreScreen = ({
   const percent = Math.round((score / total) * 100);
   const message = getFeedbackMessage(score, total);
   const hasInserted = useRef(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (hasInserted.current) return;
@@ -39,20 +42,31 @@ const ScoreScreen = ({
 
       if (error) {
         console.error("Erreur lors de l'enregistrement :", error.message);
-      } else {
-        console.log("Score enregistré :", {
-          userId,
-          userName,
-          score,
-          total,
-          category,
-        });
       }
     };
 
     saveScore();
     hasInserted.current = true;
   }, [userId, userName, score, total, category]);
+
+  useEffect(() => {
+    const checkIfInTopTen = async () => {
+      const { data } = await supabase
+        .from("games")
+        .select("*")
+        .eq("category", category)
+        .order("score", { ascending: false });
+
+      if (data) {
+        const index = data.findIndex((entry) => entry.user_id === userId);
+        if (index >= 0 && index < 10) {
+          toast.success("Bravo ! Tu es dans le top 10 de cette catégorie.");
+        }
+      }
+    };
+
+    checkIfInTopTen();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 flex items-center justify-center px-4">
@@ -88,6 +102,14 @@ const ScoreScreen = ({
           className="mt-4 w-full bg-indigo-600 text-white hover:bg-indigo-700"
         >
           Rejouer le quiz
+        </Button>
+
+        <Button
+          variant="secondary"
+          className="w-full"
+          onClick={() => navigate("/leaderboard")}
+        >
+          Voir le classement
         </Button>
       </div>
     </div>

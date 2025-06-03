@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { RocketIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Welcome = ({ onStart }) => {
   const [nbQuestions, setNbQuestions] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 flex items-center justify-center px-4">
       <div className="bg-white shadow-2xl rounded-2xl border border-gray-300 max-w-xl w-full p-8 space-y-6">
         <h1 className="text-4xl font-extrabold text-indigo-600">
-          🎉 Bienvenue dans le Super Quiz !
+          Bienvenue dans le Super Quiz
         </h1>
 
         <p className="text-gray-700">
@@ -18,8 +20,8 @@ const Welcome = ({ onStart }) => {
           multiples. Tu as <strong>15 secondes</strong> par question.
         </p>
         <p className="text-gray-700">
-          Une bonne réponse = vert. Une mauvaise ? Elle s'affichera en rouge
-          avec la bonne réponse.
+          Une bonne réponse s'affichera en vert. Une mauvaise en rouge avec la
+          bonne réponse indiquée.
         </p>
 
         <div className="space-y-4">
@@ -32,15 +34,15 @@ const Welcome = ({ onStart }) => {
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
             >
-              <option value="">🎲 Mix de catégories</option>
-              <option value="9">🧠 Culture Générale</option>
-              <option value="11">🎬 Films</option>
-              <option value="12">🎵 Musique</option>
-              <option value="18">💻 Informatique</option>
-              <option value="17">🌿 Science & Nature</option>
-              <option value="21">🏅 Sport</option>
-              <option value="23">📜 Histoire</option>
-              <option value="27">🐾 Animaux</option>
+              <option value="">Mix de catégories</option>
+              <option value="9">Culture Générale</option>
+              <option value="11">Films</option>
+              <option value="12">Musique</option>
+              <option value="18">Informatique</option>
+              <option value="17">Science & Nature</option>
+              <option value="21">Sport</option>
+              <option value="23">Histoire</option>
+              <option value="27">Animaux</option>
             </select>
           </div>
 
@@ -65,6 +67,14 @@ const Welcome = ({ onStart }) => {
         >
           <RocketIcon className="w-5 h-5" />
           Démarrer le Quiz
+        </Button>
+
+        <Button
+          variant="ghost"
+          className="text-sm underline"
+          onClick={() => navigate("/leaderboard")}
+        >
+          Voir le classement général
         </Button>
       </div>
     </div>

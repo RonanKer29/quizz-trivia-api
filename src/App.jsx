@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Welcome from "./components/Welcome";
 import QuestionCard from "./components/QuestionCard";
 import ScoreScreen from "./components/ScoreScreen";
 import Login from "./components/Login";
+import Leaderboard from "./components/Leaderboard";
 import { getUser, signOut } from "./utils/auth";
 import { CATEGORY_LABELS } from "./utils/categories";
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [questions, setQuestions] = useState([]);
-  const [isQuizStarted, setIsQuizStarted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [selectedCategoryLabel, setSelectedCategoryLabel] = useState("Mix");
 
-  // Vérifie l'authentification à l'arrivée
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchUser = async () => {
       const u = await getUser();
@@ -27,18 +29,18 @@ const App = () => {
   const startQuiz = async (amount, categoryId) => {
     try {
       let url = `https://opentdb.com/api.php?amount=${amount}&type=multiple`;
-
       if (categoryId) {
         url += `&category=${categoryId}`;
       }
-
       const res = await fetch(url);
       const data = await res.json();
 
       setQuestions(data.results);
-      setIsQuizStarted(true);
+      setCurrentIndex(0);
+      setScore(0);
       setSelectedCategoryId(categoryId || "");
       setSelectedCategoryLabel(CATEGORY_LABELS[categoryId] || "Mix");
+      navigate("/quiz");
     } catch (err) {
       console.error("Erreur lors du chargement des questions:", err);
     }
@@ -50,13 +52,10 @@ const App = () => {
     }
   };
 
-  // Déconnexion utilisateur
   const handleLogout = async () => {
     await signOut();
     setUser(null);
-    setIsQuizStarted(false);
-    setScore(0);
-    setCurrentIndex(0);
+    navigate("/");
   };
 
   if (!user) {
@@ -77,40 +76,35 @@ const App = () => {
         </button>
       </div>
 
-      {isQuizStarted ? (
-        questions.length > 0 ? (
-          currentIndex < questions.length ? (
-            <QuestionCard
-              currentIndex={currentIndex}
-              questionData={questions[currentIndex]}
-              onAnswer={handleAnswer}
-              onNext={() => setCurrentIndex((prev) => prev + 1)}
-              totalQuestions={questions.length}
-              selectedCategoryLabel={selectedCategoryLabel}
-            />
-          ) : (
-            <ScoreScreen
-              score={score}
-              total={questions.length}
-              category={selectedCategoryLabel}
-              selectedCategoryLabel={selectedCategoryLabel}
-              userId={user.id}
-              userName={user.email}
-              onRestart={() => {
-                setCurrentIndex(0);
-                setScore(0);
-                setIsQuizStarted(false);
-              }}
-            />
-          )
-        ) : (
-          <p className="text-center mt-20 text-gray-500">
-            Chargement des questions...
-          </p>
-        )
-      ) : (
-        <Welcome onStart={startQuiz} />
-      )}
+      <Routes>
+        <Route path="/" element={<Welcome onStart={startQuiz} />} />
+        <Route
+          path="/quiz"
+          element={
+            questions.length > 0 && currentIndex < questions.length ? (
+              <QuestionCard
+                currentIndex={currentIndex}
+                questionData={questions[currentIndex]}
+                onAnswer={handleAnswer}
+                onNext={() => setCurrentIndex((prev) => prev + 1)}
+                totalQuestions={questions.length}
+                selectedCategoryLabel={selectedCategoryLabel}
+              />
+            ) : (
+              <ScoreScreen
+                score={score}
+                total={questions.length}
+                category={selectedCategoryId}
+                selectedCategoryLabel={selectedCategoryLabel}
+                userId={user.id}
+                userName={user.email}
+                onRestart={() => navigate("/")}
+              />
+            )
+          }
+        />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+      </Routes>
     </div>
   );
 };
