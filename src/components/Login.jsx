@@ -23,18 +23,20 @@ const Login = ({ onAuthSuccess }) => {
   };
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-white to-gray-100 px-4">
-      <div className="bg-white p-8 rounded-xl shadow-lg border max-w-md w-full space-y-6">
+    <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 px-4">
+      <div className="bg-white p-8 rounded-2xl shadow-2xl border max-w-md w-full space-y-6">
         <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-bold text-gray-800">🧠 Quizz-Trivia</h1>
-          <p className="text-sm text-gray-600">
-            Teste tes connaissances, bats des records, et débloque ton plein
-            potentiel !
+          <h1 className="text-3xl font-bold text-indigo-700 tracking-tight">
+            Quizz-Trivia
+          </h1>
+          <p className="text-sm text-gray-700">
+            Teste tes connaissances, bats des records et progresse à chaque
+            partie.
           </p>
           <p className="text-sm text-gray-500">
             {isLogin
-              ? "Connecte-toi pour commencer l’aventure."
-              : "Crée un compte pour te mesurer aux meilleurs."}
+              ? "Connecte-toi pour commencer."
+              : "Inscris-toi pour rejoindre l’aventure."}
           </p>
         </div>
 
@@ -49,7 +51,7 @@ const Login = ({ onAuthSuccess }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:ring-blue-400"
+            className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
           <input
             type="password"
@@ -57,10 +59,13 @@ const Login = ({ onAuthSuccess }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:ring-blue-400"
+            className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
 
-          <Button type="submit" className="w-full">
+          <Button
+            type="submit"
+            className="w-full bg-indigo-600 text-white hover:bg-indigo-700"
+          >
             {isLogin ? "Se connecter" : "Créer mon compte"}
           </Button>
         </form>
@@ -69,7 +74,7 @@ const Login = ({ onAuthSuccess }) => {
           {isLogin ? "Pas encore de compte ?" : "Déjà inscrit ?"}{" "}
           <button
             onClick={() => setIsLogin(!isLogin)}
-            className="text-blue-600 hover:underline font-medium"
+            className="text-indigo-600 hover:underline font-medium"
           >
             {isLogin ? "Créer un compte" : "Se connecter"}
           </button>
