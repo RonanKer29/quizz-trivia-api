@@ -7,6 +7,7 @@ import Login from "./components/Login";
 import Leaderboard from "./components/Leaderboard";
 import { getUser, signOut } from "./utils/auth";
 import { CATEGORY_LABELS } from "./utils/categories";
+import { Analytics } from "@vercel/analytics/react";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -105,6 +106,7 @@ const App = () => {
         />
         <Route path="/leaderboard" element={<Leaderboard />} />
       </Routes>
+      <Analytics />
     </div>
   );
 };
