@@ -2,11 +2,11 @@
 
 **Une application de quiz multi-catégories avec classement en ligne, conçue avec React, Supabase et Open Trivia DB.**
 
-[🎮 Lancer l'app](https://quizz-trivia-api.vercel.app) · [📘 Open Trivia API](https://opentdb.com/) · [🛠️ Stack technique](#-stack-technique)
+[Lancer l'app](https://quizz-trivia-api.vercel.app) · [Open Trivia API](https://opentdb.com/) · [Stack technique](#-stack-technique)
 
 ---
 
-## ✨ Aperçu
+## Aperçu
 
 Quizz Trivia est une app de quiz intuitive et responsive, permettant aux utilisateurs de :
 
@@ -18,7 +18,7 @@ Quizz Trivia est une app de quiz intuitive et responsive, permettant aux utilisa
 
 ---
 
-## 📸 Aperçu visuel
+## Aperçu visuel
 
 ![Welcome Screen](./public/screenshot-welcome.png)
 ![Question](./public/screenshot-question.png)
@@ -27,7 +27,7 @@ Quizz Trivia est une app de quiz intuitive et responsive, permettant aux utilisa
 
 ---
 
-## 🚀 Fonctionnalités
+## Fonctionnalités
 
 - 🔐 **Authentification** via Supabase (email + mot de passe)
 - 🧠 **Quiz dynamique** avec questions aléatoires par catégorie
@@ -41,7 +41,7 @@ Quizz Trivia est une app de quiz intuitive et responsive, permettant aux utilisa
 
 ---
 
-## 🛠️ Stack technique
+##  Stack technique
 
 | Technologie      | Usage                          |
 |------------------|--------------------------------|
